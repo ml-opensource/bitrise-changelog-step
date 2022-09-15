@@ -105,7 +105,6 @@ async function buildChangelog(commits) {
         if(latest_tag) {
             list.push(latest_tag)
             list.push(divider)
-            list.push('\n')
         }
     } catch {
         // empty
@@ -127,7 +126,6 @@ async function buildConventionalChangelog() {
         if(latest_tag) {
             list.push(latest_tag)
             list.push(divider)
-            list.push('\n')
         }
     } catch {
         // empty
@@ -162,7 +160,6 @@ async function buildMarkdown() {
         if(latest_tag) {
             list.push("#" + latest_tag)
             list.push(divider)
-            list.push('\n')
         }
     } catch {
         // empty
