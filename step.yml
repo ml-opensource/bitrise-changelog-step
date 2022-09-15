@@ -1,0 +1,62 @@
+title: Title
+summary: Some summary that shouldn't be that long
+description: |-
+  ## Markdown title 
+  bla bla bla
+
+  `inline code`  
+
+  Some longer code example
+  ```
+  code
+  ```  
+website: https://github.com/monstar-lab-oss/repo
+source_code_url: https://github.com/monstar-lab-oss/repo
+support_url: https://github.com/monstar-lab-oss/repo/issues
+host_os_tags:
+  - osx-10.10
+project_type_tags: []
+type_tags:
+  - utility
+is_requires_admin_user: false
+is_always_run: false
+is_skippable: false
+deps:
+  brew:
+  - name: git
+  apt_get:
+  - name: git
+run_if: true
+inputs:
+- some_input: "yes"
+  opts:
+    is_expand: false
+    is_required: true
+    title: "Some input that be toggled between yes and no"
+    value_options:
+    - "yes"
+    - "no"
+- longer_input: "%s (%cn)"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "git log format"
+    category: Formatting
+    summary: |
+      Custom --pretty format for `git log ... --pretty=format:"$prettygitformat"`. Defaults to `%s (%cn)`
+    description: |
+      Commit messages are pulled via: `changelog="$(git log --no-merges --pretty=format:"$prettygitformat" --date=format:"$dateformat" $latest_tag...$previous_tag)"`.  
+      Which enables custom commit message formatting via the step input: `pretty_git_format`.    
+      
+      [Documentation on git log pretty formats can be found here](https://git-scm.com/docs/pretty-formats)
+outputs:
+  - SOME_OUTPUT: 
+    opts:
+      title: "Some output"
+      summary: ""
+      description: |
+        Example of generated output `SOME_OUTPUT`:    
+        ```
+        Some random output!
+        ```
+
