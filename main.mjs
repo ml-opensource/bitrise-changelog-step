@@ -134,12 +134,13 @@ async function buildConventionalChangelog() {
     }
 
     let featureTitle = process.env.custom_features_name || "Features"
-    let fixTitle = process.env.custom_features_name || "Bugfixes"
-    let maintenanceTitle = process.env.custom_features_name || "Maintenance"
-    let refactorTitle = process.env.custom_features_name || "Refactors"
-    let formatTitle = process.env.custom_features_name || "Formatting"
-    let testsTitle = process.env.custom_features_name || "Tests"
-    let otherTitle = process.env.custom_features_name || "Other changes"
+    let fixTitle = process.env.custom_bugfixes_name || "Bugfixes"
+    let maintenanceTitle = process.env.custom_maintenance_name || "Maintenance"
+    let refactorTitle = process.env.custom_refactor_name || "Refactors"
+    let formatTitle = process.env.custom_format_name || "Formatting"
+    let testsTitle = process.env.custom_test_name || "Tests"
+    let docsTitle = process.env.custom_documentation_name || "Documentation"
+    let otherTitle = process.env.custom_other_name || "Other changes"
 
     if(sections.features.length > 0) addSection(list, sections.features, featureTitle)
     if(sections.fixes.length > 0) addSection(list, sections.fixes, fixTitle)
@@ -168,12 +169,13 @@ async function buildMarkdown() {
     }
 
     let featureTitle = process.env.custom_features_name || "## 🎉 Features"
-    let fixTitle = process.env.custom_features_name || "## 🐛 Bugfixes"
-    let maintenanceTitle = process.env.custom_features_name || "## 🔨Maintenance"
-    let refactorTitle = process.env.custom_features_name || "## 🧹 Refactors"
-    let formatTitle = process.env.custom_features_name || "## 📋 Formatting"
-    let testsTitle = process.env.custom_features_name || "## 📝 Tests"
-    let otherTitle = process.env.custom_features_name || "## 📚 Other changes"
+    let fixTitle = process.env.custom_bugfixes_name || "## 🐛 Bugfixes"
+    let maintenanceTitle = process.env.custom_maintenance_name || "## 🔨Maintenance"
+    let refactorTitle = process.env.custom_refactor_name || "## 🧹 Refactors"
+    let formatTitle = process.env.custom_format_name || "## 📋 Formatting"
+    let testsTitle = process.env.custom_test_name || "## 📝 Tests"
+    let docsTitle = process.env.custom_documentation_name || "## 📄 Documentation"
+    let otherTitle = process.env.custom_other_name || "## 📚 Other changes"
 
     if(sections.features.length > 0) addMarkdownSection(list, sections.features, featureTitle)
     if(sections.fixes.length > 0) addMarkdownSection(list, sections.fixes, fixTitle)

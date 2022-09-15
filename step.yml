@@ -1,18 +1,66 @@
-title: Title
-summary: Some summary that shouldn't be that long
+title: Conventional Commits-changelog  
+summary: Generates a changelog for deployment between two tags
 description: |-
-  ## Markdown title 
-  bla bla bla
-
-  `inline code`  
-
-  Some longer code example
+  ## Conventional Commits-changelog  
+  This step supports Conventional Commit formatting and parses the resulting commits into a nicely formatted changelog:    
+    
+  It parses the commit messages by the form:  
+  `feat: implemented IAP` -> ` - Implemented IAP (John Doe)`  
+    
+  And if you supply extra context to a Jira ticket or similar:  
+  `feat(JRA-123): implemented IAP` -> ` - JRA-123 Implemented IAP (John Doe)`  
+    
+  ### Example of generated output `COMMIT_CHANGELOG_MARKDOWN`:  
+    
   ```
-  code
+  v1.0.1
+  -----
+
+  🎉 Features
+  -----
+  - Implemented IAP (John Doe)
+  - JRA-123 Implemented IAP (John Doe)
+
+  🐛 Bugfixes
+  -----
+  - JRA-123 Fixed unintended bug (John Doe)
+
+  🤷 Other changes
+  -----
+  - Initial commit (John Doe)
+  ```
+
+  ### Options  
+
+  You can override the formatting of each section via the following step inputs:    
+  `custom_features_name`: 🎉 Features  
+  `custom_bugfixes_name`: 🐛 Bugfixes  
+  `custom_maintenance_name`: 🔨Improvements  
+  `custom_format_name`: ⚒ Formatting  
+  `custom_test_name`: 📝 Tests  
+  `custom_refactor_name`: 🧹 Refactors   
+  `custom_documentation_name`: 📄 Documentation  
+  `custom_other_name`: 🤷 Other changes    
+    
+  ## Normal changelog
+  Generates a changelog message from git commit for use in other steps. It pulls every commit message between the last two tags or if less than 2 tags are found, all commit messages.  
+    
+  ### Example of generated output `COMMIT_CHANGELOG`:    
+  ```
+  - Cleaned up the code (John Doe)
+  - Initial commit (John Doe)
   ```  
-website: https://github.com/monstar-lab-oss/repo
-source_code_url: https://github.com/monstar-lab-oss/repo
-support_url: https://github.com/monstar-lab-oss/repo/issues
+    
+  ## Input options
+
+  Commit messages are pulled via: `changelog="$(git log --no-merges --pretty=format:"$prettygitformat" --date=format:"$dateformat" $latest_tag...$previous_tag)"`.  
+  Which enables custom commit message formatting via the step input: `pretty_git_format`.  
+  You can also override the date format used in `git log` via the step input: `custom_dateformat`   
+
+  [Documentation on git log pretty formats can be found here](https://git-scm.com/docs/pretty-formats)
+website: https://github.com/nodes-android/ci-bitrise-changelog-step
+source_code_url: https://github.com/nodes-android/ci-bitrise-changelog-step
+support_url: https://github.com/nodes-android/ci-bitrise-changelog-step/issues
 host_os_tags:
   - osx-10.10
 project_type_tags: []
@@ -28,15 +76,15 @@ deps:
   - name: git
 run_if: true
 inputs:
-- some_input: "yes"
+- conventional_commit: "yes"
   opts:
     is_expand: false
     is_required: true
-    title: "Some input that be toggled between yes and no"
+    title: "Commits are following conventional commits, parse into sections."
     value_options:
     - "yes"
     - "no"
-- longer_input: "%s (%cn)"
+- pretty_git_format: "%s (%cn)"
   opts:
     is_expand: false
     is_required: false
@@ -49,14 +97,116 @@ inputs:
       Which enables custom commit message formatting via the step input: `pretty_git_format`.    
       
       [Documentation on git log pretty formats can be found here](https://git-scm.com/docs/pretty-formats)
+- custom_dateformat: "%Y-%m-%d %H:%M:%S"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "git log date format"
+    category: Formatting
+    summary: |
+      Custom --pretty date format for `git log ... --date=format:"$dateformat" `. Defaults to `"%Y-%m-%d %H:%M:%S"`
+    description: |
+      Commit messages are pulled via: `changelog="$(git log --no-merges --pretty=format:"$prettygitformat" --date=format:"$dateformat" $latest_tag...$previous_tag)"`.  
+      Which enables custom commit message formatting via the step input: `custom_dateformat`.  
+
+      [Documentation on git log pretty formats can be found here](https://git-scm.com/docs/pretty-formats)
+
+- custom_features_name: "🎉 Features"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "Features"
+    category: "Sections"
+    summary:
+    description: 
+- custom_bugfixes_name: "🐛 Bugfixes"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "Bugfixes"
+    category: "Sections"
+    summary:
+    description: 
+- custom_maintenance_name: "🔨 Improvements"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "Improvements"
+    category: "Sections"
+    summary:
+    description: 
+- custom_format_name: "⚒ Formatting"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "Formatting"
+    category: "Sections"
+    summary:
+    description: 
+- custom_test_name: "📝 Tests"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "Tests"
+    category: "Sections"
+    summary:
+    description: 
+- custom_refactor_name: "🧹 Refactors"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "Refactors"
+    category: "Sections"
+    summary:
+    description: 
+- custom_documentation_name: "📄 Documentation"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "Documentation"
+    category: "Sections"
+    summary:
+    description: 
+- custom_other_name: "🤷 Other changes"
+  opts:
+    is_expand: false
+    is_required: false
+    title: "Other changes"
+    category: "Sections"
+    summary:
+    description: 
 outputs:
-  - SOME_OUTPUT: 
+  - COMMIT_CHANGELOG: 
     opts:
-      title: "Some output"
+      title: "Generated changelog"
       summary: ""
       description: |
-        Example of generated output `SOME_OUTPUT`:    
+        Example of generated output `COMMIT_CHANGELOG`:    
         ```
-        Some random output!
+        - Cleaned up the code (John Doe)
+        - Initial commit (John Doe)
+        ```
+  - COMMIT_CHANGELOG_MARKDOWN:
+    opts:
+      title: "Generated markdown changelog"
+      summary: ""
+      description: |
+        Example of generated output `COMMIT_CHANGELOG_MARKDOWN`:    
+        ```
+        v1.0.1
+        -----
+
+        🎉 Features
+        -----
+        - Implemented IAP (John Doe)
+        - JRA-123 Implemented IAP (John Doe)
+
+        🐛 Bugfixes
+        -----
+        - JRA-123 Fixed unintended bug (John Doe)
+
+        🤷 Other changes
+        -----
+        - Initial commit (John Doe)
         ```
 
