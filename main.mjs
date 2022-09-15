@@ -105,6 +105,7 @@ async function buildChangelog(commits) {
         if(latest_tag) {
             list.push(latest_tag)
             list.push(divider)
+            list.push('\n')
         }
     } catch {
         // empty
@@ -126,6 +127,7 @@ async function buildConventionalChangelog() {
         if(latest_tag) {
             list.push(latest_tag)
             list.push(divider)
+            list.push('\n')
         }
     } catch {
         // empty
@@ -160,6 +162,7 @@ async function buildMarkdown() {
         if(latest_tag) {
             list.push("#" + latest_tag)
             list.push(divider)
+            list.push('\n')
         }
     } catch {
         // empty
@@ -201,7 +204,7 @@ function addMarkdownSection(list, section, title) {
 async function getTitle() {
     let latest_tag_commit = await quiet($`git rev-list --tags --skip=0 --max-count=1`)
     let latest_tag = await quiet($`git describe --abbrev=0 --tags ${latest_tag_commit}`)
-    return latest_tag
+    return latest_tag.trim()
 }
 
 let commits = await fetchCommits();
