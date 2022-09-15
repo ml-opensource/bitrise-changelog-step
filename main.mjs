@@ -105,7 +105,6 @@ async function buildChangelog(commits) {
         if(latest_tag) {
             list.push(latest_tag)
             list.push(divider)
-            list.push('\n')
         }
     } catch {
         // empty
@@ -127,7 +126,6 @@ async function buildConventionalChangelog() {
         if(latest_tag) {
             list.push(latest_tag)
             list.push(divider)
-            list.push('\n')
         }
     } catch {
         // empty
@@ -162,7 +160,6 @@ async function buildMarkdown() {
         if(latest_tag) {
             list.push("#" + latest_tag)
             list.push(divider)
-            list.push('\n')
         }
     } catch {
         // empty
@@ -193,14 +190,12 @@ function addSection(list, section, title) {
     list.push(title)
     list.push(divider)
     section.forEach((c) => list.push(c))
-    list.push('\n')
 }
 
 function addMarkdownSection(list, section, title) {
     list.push(title)
     list.push(divider)
     section.forEach((c) => list.push(" - " + c))
-    list.push('\n')
 }
 
 async function getTitle() {
@@ -212,7 +207,8 @@ async function getTitle() {
 let commits = await fetchCommits();
 fillSections(commits)
 await buildChangelog(commits)
-await buildMarkdown(commits)
+await buildMarkdown()
+await buildConventionalChangelog()
 
 console.log(changelog.text)
 console.log(changelog.markdown)
