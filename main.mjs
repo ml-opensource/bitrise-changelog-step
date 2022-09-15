@@ -1,7 +1,7 @@
 #!/usr/bin/env zx
 
 let numTags = await quiet($`git tag -l | wc -l`)
-let divider = "------\n"
+let divider = "------"
 let dateformat = process.env.dateformat || "%Y-%m-%d %H:%M:%S"
 let prettygitformat = process.env.prettygitformat || "%s (%cn)"
 
