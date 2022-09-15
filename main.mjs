@@ -211,8 +211,8 @@ async function getTitle() {
 
 let commits = await fetchCommits();
 fillSections(commits)
-await buildChangelog()
-await buildMarkdown()
+await buildChangelog(commits)
+await buildMarkdown(commits)
 
 console.log(changelog.text)
 console.log(changelog.markdown)

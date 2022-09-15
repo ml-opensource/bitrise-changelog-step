@@ -176,6 +176,26 @@ inputs:
     summary:
     description: 
 outputs:
+  - COMMIT_CHANGELOG_TEXT:
+    opts:
+      title: "Generated changelog"
+      summary: ""
+      description: |
+        Example of generated output `COMMIT_CHANGELOG_TEXT`:    
+        ```
+        - Cleaned up the code (John Doe)
+        - Initial commit (John Doe)
+        ```
+  - COMMIT_CHANGELOG_SECTIONS:
+    opts:
+      title: "Generated changelog"
+      summary: ""
+      description: |
+        Example of generated output `COMMIT_CHANGELOG_SECTIONS`:    
+        ```
+        - Cleaned up the code (John Doe)
+        - Initial commit (John Doe)
+        ```
   - COMMIT_CHANGELOG: 
     opts:
       title: "Generated changelog"
