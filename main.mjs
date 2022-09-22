@@ -208,6 +208,9 @@ async function getTitle() {
     return latest_tag.toString().trim()
 }
 
+// Let's fetch all tags as the default git clone step, doesn't do it
+await nothrow($`git fetch --all --tags`)
+
 let commits = await fetchCommits();
 fillSections(commits)
 await buildChangelog(commits)
