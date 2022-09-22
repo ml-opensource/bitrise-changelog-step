@@ -209,7 +209,13 @@ async function getTitle() {
 }
 
 // Let's fetch all tags as the default git clone step, doesn't do it
-await nothrow($`git fetch --tags origin refs/heads/main`)
+try {
+    await nothrow($`git fetch --tags origin refs/heads/main`)
+} catch(e) {
+    console.log('Failed fetching tags...')
+    console.log(e.toString())
+}
+
 
 let commits = await fetchCommits();
 fillSections(commits)
