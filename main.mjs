@@ -199,6 +199,7 @@ function addMarkdownSection(list, section, title) {
     list.push(title)
     list.push(divider)
     section.forEach((c) => list.push(" - " + c))
+    list.push('\n')
 }
 
 async function getTitle() {
