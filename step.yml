@@ -76,6 +76,12 @@ deps:
   - name: git
 run_if: true
 inputs:
+- ticket_message_format: "%ticket %message"
+  opts: 
+    is_required: true
+    is_expand: false
+    summary: |
+      Ticket format for each individual section line / commit message
 - conventional_commit: "yes"
   opts:
     is_expand: false

@@ -4,7 +4,7 @@ let numTags = await quiet($`git tag -l | wc -l`)
 let divider = "------"
 let dateformat = process.env.dateformat || "%Y-%m-%d %H:%M:%S"
 let prettygitformat = process.env.prettygitformat || "%s (%cn)"
-
+let ticketMessageFormat = process.env.ticket_message_format || "%ticket %message"
 
 let changelog = {
     text: '',
@@ -49,7 +49,10 @@ function formatCommit(re, commit, list) {
     let message = capitalizeFirstLetter(matched.groups.message.trim())
 
     if(ticket) {
-        list.push(`${ticket} ${message}`)
+        let line = ticketMessageFormat
+            .replace("%ticket", ticket)
+            .replace("%message", message)
+        list.push(line)
     } else {
         list.push(message)
     }
