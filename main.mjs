@@ -4,7 +4,7 @@ let numTags = await quiet($`git tag -l | wc -l`)
 let divider = "------"
 let dateformat = process.env.dateformat || "%Y-%m-%d %H:%M:%S"
 let prettygitformat = process.env.prettygitformat || "%s (%cn)"
-let ticketMessageFormat = process.env.ticket_message_format || "%ticket %message"
+let ticketMessageFormat = process.env.ticket_message_format || "(%ticket) %message"
 
 let changelog = {
     text: '',
@@ -153,6 +153,9 @@ async function buildConventionalChangelog() {
     if(sections.tests.length > 0) addSection(list, sections.tests, testsTitle)
     if(sections.other.length > 0) addSection(list, sections.other, otherTitle)
 
+    if (list[list.length - 1] === '') {
+        list.pop()
+    }
     let text = list.join('\n')
     changelog.convtext = text
 }
@@ -188,6 +191,9 @@ async function buildMarkdown() {
     if(sections.tests.length > 0) addMarkdownSection(list, sections.tests, testsTitle)
     if(sections.other.length > 0) addMarkdownSection(list, sections.other, otherTitle)
 
+    if (list[list.length - 1] === '') {
+        list.pop()
+    }
     let md = list.join('\n')
     changelog.markdown = md
 }
@@ -196,14 +202,14 @@ function addSection(list, section, title) {
     list.push(title)
     list.push(divider)
     section.forEach((c) => list.push(c))
-    list.push('\n')
+    list.push('')
 }
 
 function addMarkdownSection(list, section, title) {
     list.push(title)
     list.push(divider)
     section.forEach((c) => list.push(" - " + c))
-    list.push('\n')
+    list.push('')
 }
 
 async function getTitle() {
