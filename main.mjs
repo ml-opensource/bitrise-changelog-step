@@ -193,6 +193,7 @@ function addSection(list, section, title) {
     list.push(title)
     list.push(divider)
     section.forEach((c) => list.push(c))
+    list.push('\n')
 }
 
 function addMarkdownSection(list, section, title) {
