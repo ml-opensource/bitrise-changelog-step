@@ -26,7 +26,7 @@ let sections = {
 
 async function fetchCommits() {
     if(manualPreviousCommit) {
-        let output = await quiet($`git log --pretty=format:${prettygitformat} --date=format:${dateformat} ${manualPreviousCommit}..`)
+        let output = await quiet($`git log --no-merges --pretty=format:${prettygitformat} --date=format:${dateformat} ${manualPreviousCommit}..`)
         return output.stdout.split('\n')
     } else if(numTags > 1) {
         let latest_tag_commit = await quiet($`git rev-list --tags --skip=0 --max-count=1`)
