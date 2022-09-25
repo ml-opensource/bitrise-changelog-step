@@ -5,6 +5,7 @@ let divider = "------"
 let dateformat = process.env.dateformat || "%Y-%m-%d %H:%M:%S"
 let prettygitformat = process.env.prettygitformat || "%s (%cn)"
 let ticketMessageFormat = process.env.ticket_message_format || "(%ticket) %message"
+let manualPreviousCommit = process.env.manual_previous_commit
 
 let changelog = {
     text: '',
@@ -24,7 +25,10 @@ let sections = {
 }
 
 async function fetchCommits() {
-    if(numTags > 1) {
+    if(manualPreviousCommit) {
+        let output = await quiet($`git log --pretty=format:${prettygitformat} --date=format:${dateformat} ${manualPreviousCommit}..`)
+        return output.stdout.split('\n')
+    } else if(numTags > 1) {
         let latest_tag_commit = await quiet($`git rev-list --tags --skip=0 --max-count=1`)
         let latest_tag = await quiet($`git describe --abbrev=0 --tags ${latest_tag_commit}`)
         
