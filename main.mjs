@@ -26,23 +26,16 @@ let sections = {
 
 async function fetchCommits() {
     let numTags = await quiet($`git tag -l | wc -l`)
-    console.log("Number of tags: ", numTags)
     if(manualPreviousCommit) {
-        console.log("Falling to manual commits")
         let output = await quiet($`git log --no-merges --pretty=format:${prettygitformat} --date=format:${dateformat} ${manualPreviousCommit}..`)
         return output.stdout.split('\n')
     } else if(numTags > 1) {
         let latest_tag_commit = await quiet($`git rev-list --tags --skip=0 --max-count=1`)
         let latest_tag = await quiet($`git describe --abbrev=0 --tags ${latest_tag_commit}`)
-        console.log("latest tag commit: ", latest_tag_commit)
-        console.log("latest tag: ", latest_tag)
         let previous_tag_commit = await quiet($`git rev-list --tags --skip=1 --max-count=1`)
         let previous_tag = await quiet($`git describe --abbrev=0 --tags ${previous_tag_commit}`)
-        console.log("previous tag commit: ", previous_tag_commit)
-        console.log("previous tag: ", previous_tag)
 
         let output = await quiet($`git log --no-merges --pretty=format:${prettygitformat} --date=format:${dateformat} ${latest_tag}...${previous_tag}`)
-        console.log("Output command: ", $`git log --no-merges --pretty=format:${prettygitformat} --date=format:${dateformat} ${latest_tag}...${previous_tag}`)
         return output.stdout.split('\n')
     } else {
         let output = await quiet($`git log --no-merges --pretty=format:${prettygitformat} --date=format:${dateformat}`)
