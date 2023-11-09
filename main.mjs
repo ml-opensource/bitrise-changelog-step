@@ -228,7 +228,7 @@ async function fetchHistory() {
     try {
       await nothrow($`git fetch --unshallow`)
     } catch(e) {
-      console.log('Failed fetching tags...')
+      console.log('Failed fetching history...')
       console.log(e.toString())
     }
   }
