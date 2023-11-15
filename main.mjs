@@ -1,11 +1,11 @@
 #!/usr/bin/env zx
 
-let numTags = await quiet($`git tag -l | wc -l`)
 let divider = "------"
 let dateformat = process.env.dateformat || "%Y-%m-%d %H:%M:%S"
 let prettygitformat = process.env.prettygitformat || "%s (%cn)"
 let ticketMessageFormat = process.env.ticket_message_format || "(%ticket) %message"
 let manualPreviousCommit = process.env.manual_previous_commit
+let custom_branch_name = process.env.custom_branch_name || ""
 
 let changelog = {
     text: '',
@@ -25,13 +25,13 @@ let sections = {
 }
 
 async function fetchCommits() {
+    let numTags = await quiet($`git tag -l | wc -l`)
     if(manualPreviousCommit) {
         let output = await quiet($`git log --no-merges --pretty=format:${prettygitformat} --date=format:${dateformat} ${manualPreviousCommit}..`)
         return output.stdout.split('\n')
     } else if(numTags > 1) {
         let latest_tag_commit = await quiet($`git rev-list --tags --skip=0 --max-count=1`)
         let latest_tag = await quiet($`git describe --abbrev=0 --tags ${latest_tag_commit}`)
-        
         let previous_tag_commit = await quiet($`git rev-list --tags --skip=1 --max-count=1`)
         let previous_tag = await quiet($`git describe --abbrev=0 --tags ${previous_tag_commit}`)
 
@@ -222,15 +222,35 @@ async function getTitle() {
     return latest_tag.toString().trim()
 }
 
-// Let's fetch all tags as the default git clone step, doesn't do it
-try {
-    await nothrow($`git fetch --tags origin refs/heads/main`)
-} catch(e) {
-    console.log('Failed fetching tags...')
-    console.log(e.toString())
+async function fetchHistory() {
+  let numberOfLocalCommits = await quiet($`git rev-list --count --all`)
+  if(numberOfLocalCommits < 2) {
+    try {
+      await nothrow($`git fetch --unshallow`)
+    } catch(e) {
+      console.log('Failed fetching history...')
+      console.log(e.toString())
+    }
+  }
 }
 
+async function fetchTags() {
+  try {
+    if(custom_branch_name == "") {
+      await nothrow($`git fetch --tags`)
+    } else {
+      await nothrow($`git fetch --tags origin refs/heads/${custom_branch_name}`)
+    }
+  } catch(e) {
+    console.log('Failed fetching tags...')
+    console.log(e.toString())
+  }
+}
 
+// Let's try fetching history if depth is equal to 1
+await fetchHistory()
+// Let's fetch all tags as the default git clone step, doesn't do it
+await fetchTags()
 let commits = await fetchCommits();
 fillSections(commits)
 await buildChangelog(commits)

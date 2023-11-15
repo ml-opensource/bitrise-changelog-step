@@ -97,6 +97,13 @@ inputs:
     summary: |
       Instead of detecting tags, use this commit hash as the starting point of the changelog
       up until current commit
+- custom_branch_name: "develop"
+  opts:
+    is_expand: false
+    is_required: false
+    summary: |
+      Instead of fetching history and tags for all branches, use this field to specify a branch to work with. 
+      Leave this field empty to fetch the entire history and all tags.
 - pretty_git_format: "%s (%cn)"
   opts:
     is_expand: false
